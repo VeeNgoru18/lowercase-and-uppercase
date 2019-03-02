@@ -1,41 +1,64 @@
+""" 
+    Has two threads
+    One thread takes a global string and checks if it is in upper case
+    If the string is in uppercase it prints that it is in uppercase and exits.
+    If the string is not in uppercase, it converts it to uppercase and prints
+    the string on the screen.
 
-from time import sleep 
-from threading import * #from package thread
-class capitalLetters(Threads):
-    def countUpperCase(string):
-        upper = 0
- for i in range(len(string)):
-     if (ord(string[i]) >= 65 and ord(string[i]) <= 90):
-         upper +=1
+    The second thread does the same but for lowercase.
 
-        print  ('Uppercase characters = %s' %upper)
+    Both threads run infinitely.
 
-        sleep(1)   
-    class smallLetters(Thread):
-    def countLowerCase(string):
-        lower = 0
-        for i in range(len(string)):
-            if(ord(string[i]) >= 97 and ord(string[i]) <=122)
-            lower += 1
+    Run this program many times and compare how each of the times run
+"""
+from time import sleep
+from threading import Thread
 
-            print ('Lowercase characters = %s' %lower)
-            sleep(1)
+class CapitalLetters(Thread):
+    """ The capital letters thread """
+    def __init__(self):
+        Thread.__init__(self)
+        self.daemon = True #daemon runs the program continuously
+        self.start()
+
+    def run(self):
+        
+        global string # use the global string defined in the main function
+        while True:
+            if string.isupper(): 
+                print ("\nThe string is already in UPPERCASE")
+            else:
+                string = string.upper()
+                print (f"\nConverting to uppercase :: {string}")
+
+            print ('\n---Exiting uppercase thread---\n')
+            sleep(2)
+
+class SmallLetters(Thread):
+    """ The small letters thread """
+    def __init__(self):
+        Thread.__init__(self)
+        self.daemon = True
+        self.start()
+
+    def run(self):
+        global string
+        while True:
+            if string.islower(): 
+                print ("\nThe string is already in lowercase")
+            else:
+                string = string.lower()
+                print (f"\nConverting to lowercase :: {string}")
+                    
+            print ('\n---Exiting lowercase thread---\n')
+            sleep(2)
 
 
- t1 = upper()
- t2 = lower()  
- 
- t1.start()
- sleep(0.5)
- t2.start()
-
-
-t1.join()
-t2.join()
-
-#driver code
-string = 'I love Python programmiNG'
-
-
-
-
+if __name__ == "__main__":
+    # "\x1b[1;33m  just changes the color of the output
+    print ("\x1b[1;33m To stop, press Ctrl+C\n")
+    string = "i love python"
+    CapitalLetters()
+    SmallLetters()
+    while True:
+        pass
